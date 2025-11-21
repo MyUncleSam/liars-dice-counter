@@ -274,20 +274,28 @@ function playPirateSound(audioCtx) {
     });
 }
 
-// Mario death-style sound (descending tones)
+// Mario death sound (classic NES Mario Bros death jingle)
 function playMarioDeathSound(audioCtx) {
+    // Classic Mario death sound: B4, F4, pause, F4, F4-E4-D4-C4 (descending)
     const notes = [
-        { freq: 784, duration: 0.15 },
-        { freq: 622, duration: 0.15 },
-        { freq: 523, duration: 0.15 },
-        { freq: 392, duration: 0.2 },
-        { freq: 311, duration: 0.2 },
-        { freq: 262, duration: 0.3 },
-        { freq: 196, duration: 0.5 },
+        { freq: 494, duration: 0.15 },   // B4
+        { freq: 349, duration: 0.15 },   // F4
+        { freq: 0, duration: 0.15 },     // pause
+        { freq: 349, duration: 0.15 },   // F4
+        { freq: 349, duration: 0.15 },   // F4
+        { freq: 330, duration: 0.15 },   // E4
+        { freq: 294, duration: 0.15 },   // D4
+        { freq: 262, duration: 0.4 },    // C4 (held longer)
     ];
 
     let time = audioCtx.currentTime;
     notes.forEach(note => {
+        if (note.freq === 0) {
+            // Just advance time for pause
+            time += note.duration;
+            return;
+        }
+
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
 
@@ -297,8 +305,8 @@ function playMarioDeathSound(audioCtx) {
         osc.frequency.value = note.freq;
         osc.type = 'square';
 
-        gain.gain.setValueAtTime(0.3, time);
-        gain.gain.exponentialRampToValueAtTime(0.01, time + note.duration);
+        gain.gain.setValueAtTime(0.25, time);
+        gain.gain.exponentialRampToValueAtTime(0.01, time + note.duration * 0.9);
 
         osc.start(time);
         osc.stop(time + note.duration);
@@ -803,17 +811,32 @@ function playMarioVictory() {
 
     try {
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        // Upbeat 8-bit victory fanfare
         const notes = [
-            { freq: 523, dur: 0.1 },
-            { freq: 659, dur: 0.1 },
-            { freq: 784, dur: 0.1 },
-            { freq: 1047, dur: 0.2 },
-            { freq: 784, dur: 0.1 },
-            { freq: 1047, dur: 0.4 }
+            // Opening burst
+            { freq: 523, dur: 0.08 },  // C5
+            { freq: 659, dur: 0.08 },  // E5
+            { freq: 784, dur: 0.12 },  // G5
+            { freq: 0, dur: 0.05 },    // pause
+            // Bouncy middle section
+            { freq: 698, dur: 0.1 },   // F5
+            { freq: 880, dur: 0.1 },   // A5
+            { freq: 784, dur: 0.08 },  // G5
+            { freq: 659, dur: 0.08 },  // E5
+            { freq: 784, dur: 0.12 },  // G5
+            { freq: 0, dur: 0.05 },    // pause
+            // Triumphant ending
+            { freq: 880, dur: 0.1 },   // A5
+            { freq: 988, dur: 0.1 },   // B5
+            { freq: 1047, dur: 0.3 },  // C6 (held)
         ];
         let time = audioCtx.currentTime;
 
         notes.forEach(note => {
+            if (note.freq === 0) {
+                time += note.dur;
+                return;
+            }
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             osc.connect(gain);
@@ -821,7 +844,7 @@ function playMarioVictory() {
             osc.frequency.value = note.freq;
             osc.type = 'square';
             gain.gain.setValueAtTime(0.2, time);
-            gain.gain.exponentialRampToValueAtTime(0.01, time + note.dur);
+            gain.gain.exponentialRampToValueAtTime(0.01, time + note.dur * 0.9);
             osc.start(time);
             osc.stop(time + note.dur);
             time += note.dur;
