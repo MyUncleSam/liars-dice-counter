@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Liar's Dice Counter</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/themes.css">
+</head>
+<body class="theme-light">
+    <div class="fullscreen-container">
+        <button class="mute-btn" id="fullscreenBtn" onclick="toggleFullscreen()">⛶</button>
+        <button class="mute-btn" onclick="window.open('https://officialgamerules.org/game-rules/liars-dice/', '_blank')">📓</button>
+    </div>
+
+    <div class="theme-selector">
+        <button class="mute-btn" id="muteBtn" onclick="toggleMute()">🔊</button>
+        <select id="themeSelect" onchange="changeTheme(this.value)">
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+            <option value="oled">OLED</option>
+            <option value="pirates">Pirates</option>
+            <option value="ocean">Ocean</option>
+            <option value="skull">Skull</option>
+            <option value="treasure">Treasure</option>
+            <option value="storm">Storm</option>
+            <option value="rum">Rum</option>
+            <option value="kraken">Kraken</option>
+            <option value="dutchman">Dutchman</option>
+            <option value="mario">Mario</option>
+        </select>
+    </div>
+
+
+    <div class="container">
+        <div class="theme-title" id="themeTitle">Liar's Dice</div>
+
+        <div class="quote-display" id="quoteDisplay"></div>
+
+        <div class="dice-count" id="diceCount">25</div>
+
+        <div class="button-row">
+            <button class="btn-primary btn-large" onclick="changeDice(-1, event)">-1</button>
+            <button class="btn-primary btn-large" onclick="changeDice(1, event)">+1</button>
+        </div>
+
+        <div class="button-row secondary-row" id="secondaryButtons">
+            <button class="btn-secondary" onclick="changeDice(-5, event)">-5</button>
+            <button class="btn-secondary" onclick="changeDice(5, event)">+5</button>
+            <button class="btn-secondary" onclick="changeDice(10, event)">+10</button>
+            <button class="btn-secondary" onclick="resetToZero(event)">0</button>
+        </div>
+
+        <div class="copyright">
+            &copy; by Stefan Ruepp <span id="copyrightYear"></span>
+        </div>
+    </div>
+
+    <div class="celebration-container" id="celebrationContainer"></div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
