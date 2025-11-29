@@ -36,8 +36,6 @@
     <div class="container">
         <div class="theme-title" id="themeTitle">Liar's Dice</div>
 
-        <button class="btn-who-starts" onclick="showStarterOverlay()">🎯 Who starts?</button>
-
         <div class="quote-display" id="quoteDisplay"></div>
 
         <div class="dice-count" id="diceCount">25</div>
@@ -63,32 +61,6 @@
     </div>
 
     <div class="celebration-container" id="celebrationContainer"></div>
-
-    <!-- Starter Selector Overlay -->
-    <div class="starter-overlay" id="starterOverlay">
-        <div class="starter-modal">
-            <button class="close-overlay" onclick="closeStarterOverlay()">✕</button>
-            <h2>Who starts?</h2>
-
-            <div class="player-input-section">
-                <label>Number of players:</label>
-                <div class="player-count-controls">
-                    <button class="player-count-btn" onclick="changePlayerCount(-1)">-</button>
-                    <span class="player-count-display" id="playerCountDisplay">5</span>
-                    <button class="player-count-btn" onclick="changePlayerCount(1)">+</button>
-                </div>
-            </div>
-
-            <div class="spinner-container">
-                <div class="spinner-circle">
-                    <div class="player-positions" id="playerPositions"></div>
-                </div>
-            </div>
-
-            <button class="btn-spin" onclick="startSelection()">SELECT!</button>
-            <div class="result-text" id="resultText"></div>
-        </div>
-    </div>
 
     <script src="js/app.js"></script>
 </body>

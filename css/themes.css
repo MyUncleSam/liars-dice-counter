@@ -2,12 +2,6 @@
 body.theme-light {
     background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
     color: #333;
-    --modal-bg: #fff;
-    --modal-text: #333;
-    --active-btn-bg: #2196F3;
-    --player-bg: rgba(33, 150, 243, 0.2);
-    --spin-btn-bg: #4CAF50;
-    --result-color: #4CAF50;
 }
 body.theme-light::before {
     content: "☀️";
@@ -51,12 +45,6 @@ body.theme-light::before {
 body.theme-dark {
     background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
     color: #f0f0f0;
-    --modal-bg: #333;
-    --modal-text: #f0f0f0;
-    --active-btn-bg: #bb86fc;
-    --player-bg: rgba(187, 134, 252, 0.2);
-    --spin-btn-bg: #7c4dff;
-    --result-color: #bb86fc;
 }
 body.theme-dark::before {
     content: "🌙";
@@ -100,12 +88,6 @@ body.theme-dark::before {
 body.theme-oled {
     background: #000000;
     color: #ffffff;
-    --modal-bg: #000;
-    --modal-text: #fff;
-    --active-btn-bg: #00ffff;
-    --player-bg: rgba(0, 255, 255, 0.2);
-    --spin-btn-bg: #00ffff;
-    --result-color: #00ffff;
 }
 body.theme-oled::before {
     content: none;
@@ -147,12 +129,6 @@ body.theme-oled::before {
 body.theme-pirates {
     background: linear-gradient(135deg, #1a0f00 0%, #3d2914 50%, #2a1a08 100%);
     color: #d4a574;
-    --modal-bg: #2a1a08;
-    --modal-text: #ffd700;
-    --active-btn-bg: #8b6914;
-    --player-bg: rgba(255, 215, 0, 0.2);
-    --spin-btn-bg: #8b6914;
-    --result-color: #ffd700;
 }
 body.theme-pirates::before {
     content: "☠️";
@@ -203,12 +179,6 @@ body.theme-pirates::before {
 body.theme-ocean {
     background: linear-gradient(180deg, #0c2340 0%, #1565c0 50%, #0d47a1 100%);
     color: #e3f2fd;
-    --modal-bg: #0d47a1;
-    --modal-text: #e3f2fd;
-    --active-btn-bg: #1976d2;
-    --player-bg: rgba(129, 212, 250, 0.2);
-    --spin-btn-bg: #1976d2;
-    --result-color: #81d4fa;
 }
 body.theme-ocean::before {
     content: "🌊";
@@ -252,12 +222,6 @@ body.theme-ocean::before {
 body.theme-skull {
     background: linear-gradient(135deg, #000 0%, #1a1a1a 100%);
     color: #fff;
-    --modal-bg: #1a1a1a;
-    --modal-text: #fff;
-    --active-btn-bg: #b71c1c;
-    --player-bg: rgba(255, 0, 0, 0.2);
-    --spin-btn-bg: #b71c1c;
-    --result-color: #ff0000;
 }
 body.theme-skull::before {
     content: "💀";
@@ -302,12 +266,6 @@ body.theme-skull::before {
 body.theme-treasure {
     background: linear-gradient(135deg, #4a2c00 0%, #7b5e00 50%, #4a2c00 100%);
     color: #fff8e1;
-    --modal-bg: #4a2c00;
-    --modal-text: #ffd700;
-    --active-btn-bg: #ffc107;
-    --player-bg: rgba(255, 215, 0, 0.2);
-    --spin-btn-bg: #ffc107;
-    --result-color: #ffd700;
 }
 body.theme-treasure::before {
     content: "💰";
@@ -353,12 +311,6 @@ body.theme-treasure::before {
 body.theme-storm {
     background: linear-gradient(180deg, #263238 0%, #37474f 50%, #455a64 100%);
     color: #eceff1;
-    --modal-bg: #263238;
-    --modal-text: #eceff1;
-    --active-btn-bg: #78909c;
-    --player-bg: rgba(144, 164, 174, 0.2);
-    --spin-btn-bg: #78909c;
-    --result-color: #90a4ae;
 }
 body.theme-storm::before {
     content: "⛈️";
@@ -402,12 +354,6 @@ body.theme-storm::before {
 body.theme-rum {
     background: linear-gradient(135deg, #3e2723 0%, #5d4037 50%, #4e342e 100%);
     color: #efebe9;
-    --modal-bg: #3e2723;
-    --modal-text: #efebe9;
-    --active-btn-bg: #8d6e63;
-    --player-bg: rgba(255, 171, 145, 0.2);
-    --spin-btn-bg: #8d6e63;
-    --result-color: #ffab91;
 }
 body.theme-rum::before {
     content: "🍺";
@@ -451,12 +397,6 @@ body.theme-rum::before {
 body.theme-kraken {
     background: linear-gradient(135deg, #0d0d0d 0%, #1a237e 50%, #0d0d0d 100%);
     color: #c5cae9;
-    --modal-bg: #1a237e;
-    --modal-text: #c5cae9;
-    --active-btn-bg: #7c4dff;
-    --player-bg: rgba(124, 77, 255, 0.2);
-    --spin-btn-bg: #7c4dff;
-    --result-color: #7c4dff;
 }
 body.theme-kraken::before {
     content: "🦑";
@@ -501,12 +441,6 @@ body.theme-kraken::before {
 body.theme-dutchman {
     background: linear-gradient(180deg, #004d40 0%, #00695c 50%, #004d40 100%);
     color: #e0f2f1;
-    --modal-bg: #004d40;
-    --modal-text: #e0f2f1;
-    --active-btn-bg: #1de9b6;
-    --player-bg: rgba(100, 255, 218, 0.2);
-    --spin-btn-bg: #1de9b6;
-    --result-color: #64ffda;
 }
 body.theme-dutchman::before {
     content: "👻";
@@ -554,12 +488,6 @@ body.theme-dutchman::before {
 body.theme-mario {
     background: linear-gradient(135deg, #1565c0 0%, #42a5f5 50%, #1565c0 100%);
     color: #fff;
-    --modal-bg: #f44336;
-    --modal-text: #fff;
-    --active-btn-bg: #4caf50;
-    --player-bg: rgba(255, 235, 59, 0.3);
-    --spin-btn-bg: #4caf50;
-    --result-color: #ffeb3b;
 }
 body.theme-mario::before {
     content: "🍄";
