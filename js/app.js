@@ -38,6 +38,22 @@ const themeTitles = {
     mario: "🍄 Liar's Dice 🍄"
 };
 
+// Theme emojis for starter dialog
+const themeEmojis = {
+    light: "☀️",
+    dark: "🌙",
+    oled: "🖥️",
+    pirates: "⚓",
+    ocean: "🌊",
+    skull: "💀",
+    treasure: "💰",
+    storm: "⛈️",
+    rum: "🥃",
+    kraken: "🦑",
+    dutchman: "👻",
+    mario: "🍄"
+};
+
 // State
 let currentCount = 25;
 let currentQuoteIndex = 0;
@@ -859,6 +875,251 @@ function changeTheme(theme) {
         themeTitle.textContent = themeTitles[theme] || "Liar's Dice";
     }
     saveState();
+}
+
+// Starter Selection Functions
+let currentPlayerCount = 5;
+let isSelecting = false;
+let selectionTimeoutId = null;
+let lastSelectedPlayer = null; // Track last winner for subsequent spins
+const MIN_PLAYERS = 2;
+const MAX_PLAYERS = 15;
+
+function showStarterOverlay() {
+    const overlay = document.getElementById('starterOverlay');
+    overlay.classList.add('show');
+
+    // Update dialog title with theme emoji
+    const currentTheme = themeSelect.value;
+    const emoji = themeEmojis[currentTheme] || '🎯';
+    const dialogTitle = overlay.querySelector('h2');
+    if (dialogTitle) {
+        dialogTitle.textContent = `${emoji} Who starts? ${emoji}`;
+    }
+
+    updatePlayerCountDisplay();
+    updatePlayerPositions();
+    document.getElementById('resultText').textContent = '';
+}
+
+function closeStarterOverlay() {
+    const overlay = document.getElementById('starterOverlay');
+    overlay.classList.remove('show');
+
+    // Stop any ongoing selection
+    if (selectionTimeoutId) {
+        clearTimeout(selectionTimeoutId);
+        selectionTimeoutId = null;
+    }
+
+    // Reset state
+    isSelecting = false;
+    lastSelectedPlayer = null; // Reset for next time dialog opens
+
+    // Clear highlights
+    const players = document.querySelectorAll('.player-position');
+    players.forEach(p => {
+        p.classList.remove('highlighted', 'winner');
+        p.style.background = '';
+        p.style.transform = '';
+        p.style.animation = '';
+    });
+
+    // Re-enable button
+    const spinBtn = document.querySelector('.btn-spin');
+    if (spinBtn) spinBtn.disabled = false;
+}
+
+function changePlayerCount(delta) {
+    const newCount = currentPlayerCount + delta;
+
+    if (newCount >= MIN_PLAYERS && newCount <= MAX_PLAYERS) {
+        currentPlayerCount = newCount;
+        lastSelectedPlayer = null; // Reset since player positions changed
+        updatePlayerCountDisplay();
+        updatePlayerPositions();
+        document.getElementById('resultText').textContent = '';
+    }
+}
+
+function updatePlayerCountDisplay() {
+    const display = document.getElementById('playerCountDisplay');
+    if (display) {
+        display.textContent = currentPlayerCount;
+    }
+}
+
+function updatePlayerPositions() {
+    const container = document.getElementById('playerPositions');
+    container.innerHTML = '';
+
+    const radius = 115; // Distance from center
+    const angleStep = (2 * Math.PI) / currentPlayerCount;
+
+    for (let i = 0; i < currentPlayerCount; i++) {
+        const angle = (i * angleStep) - (Math.PI / 2); // Start from top
+        const x = radius * Math.cos(angle);
+        const y = radius * Math.sin(angle);
+
+        const playerDiv = document.createElement('div');
+        playerDiv.className = 'player-position';
+        playerDiv.textContent = `P${i + 1}`;
+        playerDiv.style.left = `calc(50% + ${x}px - 25px)`;
+        playerDiv.style.top = `calc(50% + ${y}px - 25px)`;
+
+        container.appendChild(playerDiv);
+    }
+}
+
+function startSelection() {
+    if (isSelecting) return;
+
+    isSelecting = true;
+    const spinBtn = document.querySelector('.btn-spin');
+    const resultText = document.getElementById('resultText');
+    const players = document.querySelectorAll('.player-position');
+
+    spinBtn.disabled = true;
+    resultText.textContent = '';
+
+    // Clear any previous timeouts
+    if (selectionTimeoutId) {
+        clearTimeout(selectionTimeoutId);
+        selectionTimeoutId = null;
+    }
+
+    // Clear any previous highlights
+    players.forEach(p => {
+        p.classList.remove('highlighted', 'winner');
+        p.style.background = '';
+        p.style.transform = '';
+        p.style.animation = '';
+    });
+
+    // Determine the winner beforehand
+    const selectedPlayer = Math.floor(Math.random() * currentPlayerCount);
+
+    // Calculate total iterations - enough spins to feel random (3-5 full cycles)
+    const minCycles = 3;
+    const extraCycles = Math.random() * 2; // 0-2 additional cycles
+    const totalIterations = Math.floor((minCycles + extraCycles) * currentPlayerCount) + selectedPlayer;
+
+    let currentIteration = 0;
+
+    // Start at last winner position, or random if first spin
+    let currentPlayer = lastSelectedPlayer !== null ? lastSelectedPlayer : Math.floor(Math.random() * currentPlayerCount);
+
+    function highlightNext() {
+        // Check if we've been cancelled
+        if (!isSelecting) {
+            return;
+        }
+
+        if (currentIteration >= totalIterations) {
+            // Selection complete - mark winner
+            // Remove ALL highlights first to prevent multiple highlighted players
+            players.forEach(p => p.classList.remove('highlighted'));
+            players[currentPlayer].classList.add('winner');
+
+            // Store the winner for next spin
+            lastSelectedPlayer = currentPlayer;
+
+            resultText.textContent = `Player ${currentPlayer + 1} starts! 🎉`;
+            spinBtn.disabled = false;
+            isSelecting = false;
+            selectionTimeoutId = null;
+
+            // Play result sound
+            playResultSound();
+            return;
+        }
+
+        // Remove highlight from previous player
+        players.forEach(p => p.classList.remove('highlighted'));
+
+        // Highlight current player
+        players[currentPlayer].classList.add('highlighted');
+
+        // Play tick sound
+        playTickSound();
+
+        // Move to next player
+        currentPlayer = (currentPlayer + 1) % currentPlayerCount;
+        currentIteration++;
+
+        // Game show wheel-style delay: starts very fast, slows down naturally
+        // Using exponential growth with random jitter for natural feel
+        const progress = currentIteration / totalIterations;
+
+        // Base delay grows exponentially from 30ms to 400ms
+        const baseDelay = 30 + (370 * Math.pow(progress, 2.5));
+
+        // Add random jitter (±15%) to make it feel more organic
+        const jitter = 1 + (Math.random() - 0.5) * 0.3;
+        const delay = baseDelay * jitter;
+
+        selectionTimeoutId = setTimeout(highlightNext, delay);
+    }
+
+    // Start the selection
+    highlightNext();
+}
+
+// Shared audio context for tick sounds to prevent audio skipping
+let tickAudioCtx = null;
+
+function playTickSound() {
+    if (isMuted) return;
+
+    try {
+        // Reuse the same audio context
+        if (!tickAudioCtx) {
+            tickAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+
+        const osc = tickAudioCtx.createOscillator();
+        const gain = tickAudioCtx.createGain();
+
+        osc.connect(gain);
+        gain.connect(tickAudioCtx.destination);
+
+        // Short, high-pitched tick
+        osc.frequency.value = 800;
+        osc.type = 'square';
+
+        const now = tickAudioCtx.currentTime;
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+
+        osc.start(now);
+        osc.stop(now + 0.05);
+    } catch(e) {
+        console.log('Audio not available');
+    }
+}
+
+function playResultSound() {
+    if (isMuted) return;
+
+    try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const notes = [523, 659, 784];
+        let time = audioCtx.currentTime;
+
+        notes.forEach((freq, i) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.frequency.value = freq;
+            osc.type = 'triangle';
+            gain.gain.setValueAtTime(0.2, time);
+            gain.gain.exponentialRampToValueAtTime(0.01, time + 0.2);
+            osc.start(time);
+            osc.stop(time + 0.2);
+            time += 0.15;
+        });
+    } catch(e) {}
 }
 
 // Initialize on load
